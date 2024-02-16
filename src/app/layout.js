@@ -11,7 +11,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={roboto.className}>{children}</body>
+      <body className={roboto.className}>
+        <main className="max-w-4xl p-4 mx-auto">
+        {children}
+        </main>
+        </body>
     </html>
   );
 }
