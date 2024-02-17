@@ -1,5 +1,5 @@
 "use client";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 
 function Navbar() {
@@ -20,12 +20,12 @@ function Navbar() {
       </nav>
       <nav className="flex items-center gap-4 font-semibold text-gray-500">
         {status === "authenticated" && (
-          <Link
+          <button
             className="px-6 py-2 text-white rounded-full bg-primary"
-            href={"/register"}
+            onClick={()=>signOut()}
           >
             Logout
-          </Link>
+          </button>
         )}
         {status !== "authenticated" && (
           <>
