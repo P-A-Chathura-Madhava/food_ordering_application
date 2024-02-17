@@ -1,5 +1,6 @@
 import Image from "next/image";
 import MenuItem from "./menu/MenuItem";
+import SectionHeaders from "./SectionHeaders";
 
 function HomeMenu() {
   return (
@@ -12,11 +13,8 @@ function HomeMenu() {
           <Image src={"/salad2.png"} alt={"salad"} width={192} height={192} />
         </div>
       </div>
-      <div className="text-center mb-4">
-        <h3 className="font-semibold leading-4 text-gray-600 uppercase">
-          Check out
-        </h3>
-        <h2 className="text-4xl italic font-bold text-primary">Menu</h2>
+      <div className="mb-4 text-center">
+    <SectionHeaders subHeader={"Check out"} mainHeader={"Menu"} />
       </div>
       <div className="grid grid-cols-3 gap-4">
         <MenuItem />
