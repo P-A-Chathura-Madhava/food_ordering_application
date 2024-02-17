@@ -1,12 +1,10 @@
 import Hero from "@/components/layout/Hero";
 import HomeMenu from "@/components/layout/HomeMenu";
-import Navbar from "@/components/layout/Navbar";
 import SectionHeaders from "@/components/layout/SectionHeaders";
 
 export default function Home() {
   return (
     <>
-      <Navbar />
       <Hero />
       <HomeMenu />
       <section className="my-16 text-center">
@@ -35,9 +33,6 @@ export default function Home() {
         <a className="text-4xl text-gray-500 underline" href="tel:+94111123246">+94 111 123 246</a>
         </div>
       </section>
-      <footer className="p-8 mt-16 text-center text-gray-500 border-t">
-        &copy; 2024 All Rights Reserved CTECH
-      </footer>
     </>
   );
 }
