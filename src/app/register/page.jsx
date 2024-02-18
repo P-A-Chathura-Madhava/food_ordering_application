@@ -56,7 +56,7 @@ function page() {
         <div className="my-4 text-center text-gray-500">
           or Login with provider
         </div>
-        <button className="flex justify-center gap-4">
+        <button type="button" className="flex justify-center gap-4" onClick={()=>signIn("google", {callbackUrl: "/"})}>
           <Image src={"/google.png"} alt={"google"} width={24} height={24} />
           Login with google
         </button>

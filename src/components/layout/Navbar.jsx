@@ -27,7 +27,7 @@ function Navbar() {
             Logout
           </button>
         )}
-        {status !== "authenticated" && (
+        {status === "unauthenticated" && (
           <>
             <Link
               className="px-6 py-2 text-white rounded-full bg-primary"
