@@ -5,13 +5,14 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import InfoBox from "../../components/layout/InfoBox";
 import SuccessBox from "../../components/layout/successBox";
+import toast from "react-hot-toast";
 
 function ProfilePage() {
   const session = useSession();
   const { status } = session;
   const [username, setUsername] = useState("");
-  const [saved, setSaved] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
+//   const [saved, setSaved] = useState(false);
+//   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -21,17 +22,34 @@ function ProfilePage() {
 
   const handleProfileInfoUpdate = async (e) => {
     e.preventDefault();
-    setSaved(false);
-    setIsSaving(true);
-    const response = await fetch("/api/profile", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: username }),
+    // setSaved(false);
+    // setIsSaving(true);
+    // toast("Saving...", {duration: 1000});
+    const savingPromise = new Promise(async (resolve, reject)=>{
+        const response = await fetch("/api/profile", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name: username }),
+          });
+          if (response.ok) {
+            resolve();
+          }else{
+            reject();
+          }
     });
-    setIsSaving(false);
-    if (response.ok) {
-      setSaved(true);
-    }
+
+    toast.promise(savingPromise, {
+        loading: "Saving...",
+        success: "Profile Saved!",
+        error: "Error"
+    });
+
+    // setIsSaving(false);
+    // toast.success("Saving Completed");
+    // if (response.ok) {
+    //     toast.success("Profile Updated");
+    // //   setSaved(true);
+    // }
   };
 
   const handleFileChange = async (e) => {
@@ -61,18 +79,20 @@ function ProfilePage() {
     <section className="mt-8">
       <h1 className="mb-4 text-4xl text-center text-primary">Profile</h1>
       <div className="max-w-md mx-auto">
-        {saved && (
+        {/* Remove after installing react-hot-toast library */}
+        {/* {saved && (
         //   <div className="p-4 text-center bg-green-100 border border-green-300 rounded-lg">
         //     Profile Saved
         //   </div>
           <SuccessBox>Profile Saved</SuccessBox>
-        )}
-        {isSaving && (
+        )} */}
+        {/* Remove after installing react-hot-toast library */}
+        {/* {isSaving && (
         //   <div className="p-4 text-center bg-blue-100 border border-blue-300 rounded-lg">
         //     Saving...
         //   </div>
         <InfoBox>Saving...</InfoBox>
-        )}
+        )} */}
         <div className="flex items-center gap-4">
           <div>
             <div className="relative p-2 rounded-lg max-w-[120px]">
