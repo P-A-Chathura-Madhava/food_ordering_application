@@ -6,17 +6,38 @@ import { useEffect, useState } from "react";
 import InfoBox from "../../components/layout/InfoBox";
 import SuccessBox from "../../components/layout/successBox";
 import toast from "react-hot-toast";
+import Link from "next/link";
+import UserTabs from "@/components/layout/UserTabs";
 
 function ProfilePage() {
   const session = useSession();
   const { status } = session;
   const [username, setUsername] = useState("");
-//   const [saved, setSaved] = useState(false);
-//   const [isSaving, setIsSaving] = useState(false);
+  const [phone, setPhone] = useState("");
+  const [streetAddress, setStreetAddress] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [profileFetched, setProfileFetched] = useState(false);
+
+  //   const [saved, setSaved] = useState(false);
+  //   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (status === "authenticated") {
       setUsername(session?.data?.user?.name);
+      fetch("/api/profile").then((response) => {
+        response.json().then((data) => {
+          setPhone(data.phone);
+          setStreetAddress(data.streetAddress);
+          setPostalCode(data.postalCode);
+          setCity(data.city);
+          setCountry(data.country);
+          setIsAdmin(data.admin);
+          setProfileFetched(true);
+        });
+      });
     }
   }, [session, status]);
 
@@ -25,23 +46,30 @@ function ProfilePage() {
     // setSaved(false);
     // setIsSaving(true);
     // toast("Saving...", {duration: 1000});
-    const savingPromise = new Promise(async (resolve, reject)=>{
-        const response = await fetch("/api/profile", {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name: username }),
-          });
-          if (response.ok) {
-            resolve();
-          }else{
-            reject();
-          }
+    const savingPromise = new Promise(async (resolve, reject) => {
+      const response = await fetch("/api/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: username,
+          phone,
+          streetAddress,
+          postalCode,
+          city,
+          country,
+        }),
+      });
+      if (response.ok) {
+        resolve();
+      } else {
+        reject();
+      }
     });
 
     toast.promise(savingPromise, {
-        loading: "Saving...",
-        success: "Profile Saved!",
-        error: "Error"
+      loading: "Saving...",
+      success: "Profile Saved!",
+      error: "Error",
     });
 
     // setIsSaving(false);
@@ -66,7 +94,7 @@ function ProfilePage() {
     }
   };
 
-  if (status === "loading") {
+  if (status === "loading" || !profileFetched) {
     return "Loading...";
   }
 
@@ -77,8 +105,9 @@ function ProfilePage() {
   const userImage = session.data.user.image;
   return (
     <section className="mt-8">
-      <h1 className="mb-4 text-4xl text-center text-primary">Profile</h1>
-      <div className="max-w-md mx-auto">
+      <UserTabs isAdmin={isAdmin} />
+      {/* <h1 className="mb-4 text-4xl text-center text-primary">Profile</h1> */}
+      <div className="max-w-md mx-auto mt-8">
         {/* Remove after installing react-hot-toast library */}
         {/* {saved && (
         //   <div className="p-4 text-center bg-green-100 border border-green-300 rounded-lg">
@@ -93,7 +122,7 @@ function ProfilePage() {
         //   </div>
         <InfoBox>Saving...</InfoBox>
         )} */}
-        <div className="flex items-center gap-4">
+        <div className="flex gap-4">
           <div>
             <div className="relative p-2 rounded-lg max-w-[120px]">
               <Image
@@ -116,16 +145,59 @@ function ProfilePage() {
             </div>
           </div>
           <form className="grow" onSubmit={handleProfileInfoUpdate}>
+            <label>First and Last Name</label>
             <input
               type="text"
               placeholder="First and Last name"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
+            <label>E-mail</label>
             <input
               type="email"
               disabled={true}
               value={session.data.user.email}
+            />
+            <label>Phone Number</label>
+            <input
+              type="tel"
+              placeholder="Phone Number"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+            <label>Street Address</label>
+            <input
+              type="text"
+              placeholder="Street Address"
+              value={streetAddress}
+              onChange={(e) => setStreetAddress(e.target.value)}
+            />
+            <div className="flex gap-2">
+            <div>
+            <label>Postal Code</label>
+              <input
+                type="text"
+                placeholder="Postal Code"
+                value={postalCode}
+                onChange={(e) => setPostalCode(e.target.value)}
+              />
+            </div>
+            <div>
+            <label>City</label>
+              <input
+                type="text"
+                placeholder="City"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+              />
+            </div> 
+            </div>
+            <label>Country</label>
+            <input
+              type="text"
+              placeholder="Country"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
             />
             <button type="submit">Save</button>
           </form>
