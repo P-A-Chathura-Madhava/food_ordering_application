@@ -28,7 +28,7 @@ button {
 }
 
 button[type="submit"], .submit {
-    @apply text-white border-0 bg-primary;
+    @apply text-white border-primary bg-primary;
 }
 
 button[type="submit"]:disabled, .submit:disabled {
